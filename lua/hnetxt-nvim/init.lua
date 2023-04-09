@@ -1,5 +1,5 @@
 local M = {}
 
 M.setup = function()
-    vim.g.hnetext_setup = true
+    vim.print("hello")
 end
