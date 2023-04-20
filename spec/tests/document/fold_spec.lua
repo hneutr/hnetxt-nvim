@@ -188,6 +188,29 @@ describe("end_indent_fold", function()
     end)
 end)
 
+describe("set_line_level", function()
+    it("modifies a blank line before a barrier", function()
+        local lines = {
+            tostring(Divider()),
+            "a",
+            "",
+            tostring(Divider())
+        }
+        assert.are.same({0, 3, 0, 0}, Fold():set_line_level(4, lines, {0, 3, 3}))
+    end)
+
+    it("doesn't modify a blank line before text", function()
+        local lines = {
+            tostring(Divider()),
+            "a",
+            "",
+            "b",
+            tostring(Divider())
+        }
+        assert.are.same({0, 3, 3, 3, 0}, Fold():set_line_level(4, lines, {0, 3, 3, 3}))
+    end)
+end)
+
 describe("get_line_levels", function()
     before_each(function()
         vim.b.list_types = nil
@@ -246,3 +269,4 @@ describe("get_line_levels", function()
         assert.are.same(expected, Fold():get_line_levels(lines))
     end)
 end)
+

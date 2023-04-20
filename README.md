@@ -2,8 +2,6 @@
 # [architecture]()
 #-------------------------------------------------------------------------------
 - `document`:
-  - `init.lua`:
-    - `Document`:
   - `fold.lua`
   - `element`:
     - `list.lua`

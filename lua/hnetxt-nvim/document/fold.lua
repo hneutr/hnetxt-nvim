@@ -1,46 +1,13 @@
 table = require("hneutil.table")
 local Object = require("util.object")
 
+local BufferLines = require("hneutil-nvim.buffer_lines")
+local Color = require("hneutil-nvim.color")
+
 local Config = require("hnetxt-lua.config")
 local Header = require("hnetxt-nvim.document.element.header")
 local Divider = require("hnetxt-nvim.document.element.divider")
 local List = require("hnetxt-nvim.document.element.list")
-
--- - create a Fold object:
---     - attributes:
---         - fold_level: number
---         - parent: fold that contains this fold
---     - functions:
---         - ends_before(line): returns true if the line is outside the current fold
---         - fold_begins_after(line): returns true if the line starts a new fold
---     - subclasses:
---         - `OuterFold`: fold for the document itself
---         - `HeaderFold`: fold for headers
---             - subclasses:
---                 - BigHeader
---                 - MediumHeader
---                 - SmallHeader
---         - `ListFold`: fold for list items
-
---[[
--- here's how folding works:
--- - start:
---      - fold_stack (fs): {0} 
---      - requred_indent_stack (ris): {0}
--- - see end of header-l: push onto fs, {0, 1}; push onto ris, {0, 0}
--- - see end of header-m: push onto fs, {0, 1, 2}; push onto ris, {0, 0, 0}
--- - see start of header-l: pop fs, {0}; pop ris, {0}
--- - see end of header-m: push onto fs, {0, 2}; push onto ris, {0, 0}
--- - see end of header-s: push onto fs, {0, 2, 3}; push onto ris, {0, 0, 0}
--- - see fold-list item indent 4: push onto fs {0, 2, 3, 4}; push onto ris, {0, 0, 0, 4}
--- - see fold-list item indent 8: push onto fs {0, 2, 3, 4, 5}; push onto ris, {0, 0, 0, 4, 8}
--- - see start of header-s: pop fs, {0, 2}; pop the ris, {0, 0}
--- - see end of header-s: push onto fs, {0, 2, 3}; push onto ris, {0, 0, 0}
-
-in other words:
-- the fold_stack and the required_indent_stack always stay the same length
---]]
-
 
 local Fold = Object:extend()
 Fold.config = Config.get("fold")
@@ -53,8 +20,6 @@ function Fold:new(args)
     self.dividers_by_size = Divider.dividers_by_size()
     self.level_stack = {0}
     self.indent_stack = {-1}
-
-    self.line_levels = {}
 end
 
 --------------------------------------------------------------------------------
@@ -69,9 +34,26 @@ function Fold:get_line_levels(lines)
     local line_levels = {}
     for index, line in ipairs(lines) do
         self:set_current_fold(index, lines)
-        line_levels[#line_levels + 1] = self.level_stack[#self.level_stack]
+        line_levels = self:set_line_level(index, lines, line_levels)
         self:set_subsequent_fold(index, lines)
     end
+
+    return line_levels
+end
+
+--------------------------------------------------------------------------------
+-- set_line_level
+-- --------------
+-- sets the level of the current line. 
+-- If the current line is a barrier and the previous line is blank, set its level to the current
+-- line's level
+--------------------------------------------------------------------------------
+function Fold:set_line_level(index, lines, line_levels)
+    if 1 < index and self:barrier_ends_fold(index, lines) and lines[index - 1]:len() == 0 then
+        line_levels[#line_levels] = self.level_stack[#self.level_stack]
+    end
+
+    line_levels[#line_levels + 1] = self.level_stack[#self.level_stack]
 
     return line_levels
 end
@@ -107,13 +89,6 @@ function Fold:set_current_fold(index, lines)
         self:end_indent_fold(list_line_ends_fold.indent:len())
     end
 end
-
--- ways to end:
--- - HeaderFold/DividerFold:
---      - Header/Divider of size >= fold_size 
--- - ListFold: 
---      - Header/Divider of any size
---      - ListLine of indent >= fold_indent
 
 function Fold:barrier_ends_fold(index, lines)
     for size, header in pairs(self.headers_by_size) do
@@ -240,6 +215,39 @@ function Fold:start_indent_fold(indent)
 
     self.level_stack[#self.level_stack + 1] = level
     self.indent_stack[#self.indent_stack + 1] = indent
+end
+
+--------------------------------------------------------------------------------
+--                                                                            --
+--                                                                            --
+--                          vim interface functions                           --
+--                                                                            --
+--                                                                            --
+--------------------------------------------------------------------------------
+function Fold.get_text(lnum)
+    local text = BufferLines.line.get({start_line = lnum})
+    local whitespace, text = text:match("^(%s*)(.*)")
+    return whitespace .. "..."
+end
+
+function Fold.get_indic(lnum)
+    if not vim.b.fold_levels then
+        vim.b.fold_levels = Fold():get_line_levels(BufferLines.get())
+    end
+
+    return vim.b.fold_levels[lnum]
+end
+
+function Fold.set_options()
+    vim.wo.foldenable = true
+    vim.wo.foldnestmax = 20
+    vim.wo.foldtext = "hnetxt_nvim#foldtext()"
+    vim.wo.fillchars = "fold: "
+    vim.wo.foldlevel = 2
+    vim.wo.foldmethod = 'expr'
+    vim.wo.foldexpr = 'hnetxt_nvim#foldexpr()'
+
+    Color.set_highlight({name = "Folded", val = {fg = 'magenta'}})
 end
 
 return Fold
