@@ -14,26 +14,27 @@ Line = Object:extend()
 Line.defaults = {
     text = '',
     line_number = 0,
+    indent = '',
 }
+Line.regex = "^(%s*)(.*)$"
 
 function Line:new(args)
-    for key, val in pairs(table.default(args, self.defaults)) do
-        self[key] = val
-    end
+    self = table.default(self, args or {}, self.defaults)
 end
 
 function Line:write()
     BufferLines.set({start_line = self.line_number, replacement = {tostring(self)}})
 end
 
-function Line:__tostring() return self.text end
+function Line:__tostring() return self.indent .. self.text end
 
 function Line:merge(other)
     self.text = _G.rstrip(self.text) .. " " .. _G.lstrip(other.text)
 end
 
 function Line.get_if_str_is_a(str, line_number)
-    return Line({text = str, line_number = line_number})
+    local indent, text = str:match(Line.regex)
+    return Line({text = text, line_number = line_number, indent = indent})
 end
 
 --------------------------------------------------------------------------------
@@ -41,10 +42,10 @@ end
 --------------------------------------------------------------------------------
 ListLine = Line:extend()
 ListLine.defaults = {
-    name = 'bullet',
     text = '',
     indent = '',
     line_number = 0,
+    name = 'bullet',
     sigil = '-',
     toggle_key = '',
     highlights = {
@@ -52,6 +53,7 @@ ListLine.defaults = {
         text = {},
     },
     toggle = {to = 'bullet'},
+    fold = false,
     -- continue_list_with
 }
 ListLine.style = {
@@ -131,7 +133,6 @@ function ListLine:map_toggle(lhs_prefix)
             mode,
             lhs,
             self.toggle_mapping_rhs:gsub("MODE", mode):gsub("NAME", self.name),
-            -- self.toggle.mapping.rhs:gsub("MODE", mode):gsub("NAME", self.name),
             {silent = true, buffer = true}
         )
     end
@@ -212,7 +213,7 @@ function Parser:parse_line(str, line_number)
         end
     end
 
-    return Line({text=str, line_number=line_number})
+    return Line.get_if_str_is_a(str, line_number)
 end
 
 function Parser:parse(raw_lines)

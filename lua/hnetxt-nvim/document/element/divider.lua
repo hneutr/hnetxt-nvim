@@ -43,4 +43,14 @@ function Divider:line_is_a(index, lines)
     return tostring(self) == lines[index]
 end
 
+function Divider.dividers_by_size()
+    local dividers_by_size = {}
+    for size, _ in pairs(Divider.config.sizes) do
+        dividers_by_size[size] = Divider(size)
+    end
+
+    return dividers_by_size
+end
+
+
 return Divider

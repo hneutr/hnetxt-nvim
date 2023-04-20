@@ -67,6 +67,7 @@ describe("__tostring", function()
         )
     end)
 end)
+
 describe("lines_are_a", function()
     it("+", function()
         local l1, l2, l3 = unpack(tostring(Header()))
@@ -96,6 +97,48 @@ describe("lines_are_a", function()
     it("-: bad header size", function()
         local l1, l2, l3 = unpack(tostring(Header()))
         assert.falsy(Header({size = 'large'}):lines_are_a(l1, l2, l3))
+    end)
+end)
+
+describe("line_is_start", function()
+    it("+: line = first divider", function()
+        assert(Header():line_is_start(1, tostring(Header())))
+    end)
+
+    it("-: line = content", function()
+        assert.falsy(Header():line_is_start(2, tostring(Header())))
+    end)
+
+    it("-: line = last divider", function()
+        assert.falsy(Header():line_is_start(3, tostring(Header())))
+    end)
+end)
+
+describe("line_is_content", function()
+    it("-: line = first divider", function()
+        assert.falsy(Header():line_is_content(1, tostring(Header())))
+    end)
+
+    it("+: line = content", function()
+        assert(Header():line_is_content(2, tostring(Header())))
+    end)
+
+    it("-: line = last divider", function()
+        assert.falsy(Header():line_is_content(3, tostring(Header())))
+    end)
+end)
+
+describe("line_is_end", function()
+    it("-: line = first divider", function()
+        assert.falsy(Header():line_is_end(1, tostring(Header())))
+    end)
+
+    it("-: line = content", function()
+        assert.falsy(Header():line_is_end(2, tostring(Header())))
+    end)
+
+    it("+: line = last divider", function()
+        assert(Header():line_is_end(3, tostring(Header())))
     end)
 end)
 

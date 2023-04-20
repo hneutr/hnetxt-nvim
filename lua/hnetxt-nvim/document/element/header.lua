@@ -65,27 +65,40 @@ function Header.set_highlights()
     end
 end
 
+function Header:line_is_start(index, lines)
+    if #lines < index + 2 then
+        return false
+    end
+
+    return self:lines_are_a(lines[index], lines[index + 1], lines[index + 2])
+end
+
+function Header:line_is_content(index, lines)
+    if index - 1 < 1 or #lines < index + 1 then
+        return false
+    end
+
+    return self:lines_are_a(lines[index - 1], lines[index], lines[index + 1])
+end
+
+function Header:line_is_end(index, lines)
+    if index - 2 < 1 then
+        return false
+    end
+
+    return self:lines_are_a(lines[index - 2], lines[index - 1], lines[index])
+end
+
 function Header:line_is_a(index, lines)
-    local candidate_index_sets = {
-        {index, index + 1, index + 2},
-        {index - 1, index, index + 1},
-        {index - 2, index - 1, index},
-    }
-
-    for _, index_set in ipairs(candidate_index_sets) do
-        local lines_set = {}
-        for _, i in ipairs(index_set) do
-            if 1 <= i and i <= #lines then
-                lines_set[#lines_set + 1] = lines[i]
+    if not self:line_is_start(index, lines) then
+        if not self:line_is_content(index, lines) then
+            if not self:line_is_end(index, lines) then
+                return false
             end
-        end
-
-        if self:lines_are_a(unpack(lines_set)) then
-            return true
         end
     end
 
-    return false
+    return true
 end
 
 function Header:lines_are_a(l1, l2, l3)
@@ -100,6 +113,15 @@ function Header:lines_are_a(l1, l2, l3)
     end
     
     return false
+end
+
+function Header.headers_by_size()
+    local headers_by_size = {}
+    for size, _ in pairs(Header.config.sizes) do
+        headers_by_size[size] = Header({size = size})
+    end
+
+    return headers_by_size
 end
 
 return Header
