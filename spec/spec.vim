@@ -11,6 +11,7 @@ lua require('setup')
 "--------------------------------[ additions ]---------------------------------"
 lua require('start')
 
-set rtp^=./vendor/lextest.nvim/
+" set rtp^=/usr/local/lib/luarocks/rocks-5.1
+" set rtp^=./vendor/lextest.nvim/
 
 lua rawset(_G, 'eq', assert.are.same)
