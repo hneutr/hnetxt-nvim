@@ -5,7 +5,7 @@ local Object = require("util.object")
 local Config = require("hnetxt-lua.config")
 local Color = require("hneutil-nvim.color")
 
-local Divider = require("hnetxt-nvim.document.element.divider")
+local Divider = require("hnetxt-nvim.text.divider")
 
 local Header = Object:extend()
 Header.config = Config.get("header")
@@ -51,7 +51,7 @@ function Header:__tostring()
     return lines
 end
 
-function Header:set_highlight()
+function Header:add_syntax_highlighting()
     cmd = self.highlight_cmd:gsub("KEY", self.highlight_key)
     cmd = cmd:gsub("CONTENT_START", self.content_start)
     vim.cmd(cmd)
@@ -59,9 +59,9 @@ function Header:set_highlight()
     Color.set_highlight({name = self.highlight_key, val = {fg = self.divider.color}})
 end
 
-function Header.set_highlights()
+function Header.add_syntax_highlights()
     for size, _ in pairs(Header.config.sizes) do
-        Header({size = size}):set_highlight()
+        Header({size = size}):add_syntax_highlighting()
     end
 end
 

@@ -15,7 +15,7 @@ TODO test:
     - get_min_indent_line
     - get_new_line_class
 --]]
-local List = require("hnetxt-nvim.document.element.list")
+local List = require("hnetxt-nvim.text.list")
 
 describe("Line", function()
     describe(":new", function() 

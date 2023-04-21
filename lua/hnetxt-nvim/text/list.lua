@@ -45,9 +45,10 @@ ListLine.defaults = {
     text = '',
     indent = '',
     line_number = 0,
-    name = 'bullet',
+    -- name = 'bullet',
     sigil = '-',
     toggle_key = '',
+    highlight = true,
     highlights = {
         sigil = {fg = "blue"},
         text = {},
@@ -66,7 +67,7 @@ ListLine.style = {
         cmd = [[syn region KEY PATTERN containedin=ALL contains=SIGIL_KEY,mkdLink]],
     },
 }
-ListLine.toggle_mapping_rhs = [[:lua require('hnetxt-nvim.document.element.list').Parser():toggle('MODE', 'NAME')<cr>]]
+ListLine.toggle_mapping_rhs = [[:lua require('hnetxt-nvim.text.list').Parser():toggle('MODE', 'NAME')<cr>]]
 
 function ListLine:new(args)
     ListLine.super.new(self, args)
@@ -102,7 +103,7 @@ function ListLine.get_sigil_class(sigil)
     return SigilClass
 end
 
-function ListLine:set_highlights()
+function ListLine:add_syntax_highlighting()
     if not self.highlight then return end
 
     -- sigils
@@ -149,8 +150,9 @@ function ListLine.get_class(name)
         ListClass = NumberedListLine
     else
         ListClass = ListLine:extend()
-        ListClass.defaults = table.default(settings, ListClass.defaults)
     end
+
+    ListClass.defaults = table.default(settings, ListClass.defaults)
 
     ListClass.get_if_str_is_a = function(str, line_number)
         return ListClass._get_if_str_is_a(str, line_number, ListClass)
@@ -189,7 +191,7 @@ end
 Parser = Object:extend()
 Parser.buffer_id = 0
 Parser.default_types = Config.get("list").default_types
-Parser.continue_cmd = [[<cr><cmd>lua require('hnetxt-nvim.document.element.list').Parser():continue()<cr>]]
+Parser.continue_cmd = [[<cmd>lua require('hnetxt-nvim.text.list').Parser():continue()<cr>]]
 
 function Parser:new()
     self.types = table.list_extend({}, self.default_types, vim.b.list_types or {})
@@ -197,12 +199,6 @@ function Parser:new()
     self.classes = {}
     for _, type_name in ipairs(self.types) do
         self.classes[type_name] = ListLine.get_class(type_name)
-    end
-end
-
-function Parser:set_highlights()
-    for name, Class in pairs(self.classes) do
-        Class():set_highlights()
     end
 end
 
@@ -335,10 +331,17 @@ function Parser:continue()
 	end
 end
 
+function add_syntax_highlights()
+    for name, Class in pairs(Parser().classes) do
+        Class():add_syntax_highlighting()
+    end
+end
+
 
 return {
     Line = Line,
     ListLine = ListLine,
     NumberedListLine = NumberedListLine,
     Parser = Parser,
+    add_syntax_highlights = add_syntax_highlights,
 }

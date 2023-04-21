@@ -1,5 +1,5 @@
-local Header = require("hnetxt-nvim.document.element.header")
-local Divider = require("hnetxt-nvim.document.element.divider")
+local Header = require("hnetxt-nvim.text.header")
+local Divider = require("hnetxt-nvim.text.divider")
 
 describe("__tostring", function()
     it("small", function()

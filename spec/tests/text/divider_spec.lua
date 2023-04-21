@@ -1,4 +1,4 @@
-local Divider = require("hnetxt-nvim.document.element.divider")
+local Divider = require("hnetxt-nvim.text.divider")
 
 local dividers = {
     small = "----------------------------------------",

@@ -5,9 +5,9 @@ local BufferLines = require("hneutil-nvim.buffer_lines")
 local Color = require("hneutil-nvim.color")
 
 local Config = require("hnetxt-lua.config")
-local Header = require("hnetxt-nvim.document.element.header")
-local Divider = require("hnetxt-nvim.document.element.divider")
-local List = require("hnetxt-nvim.document.element.list")
+local Header = require("hnetxt-nvim.text.header")
+local Divider = require("hnetxt-nvim.text.divider")
+local List = require("hnetxt-nvim.text.list")
 
 local Fold = Object:extend()
 Fold.config = Config.get("fold")
@@ -238,15 +238,7 @@ function Fold.get_indic(lnum)
     return vim.b.fold_levels[lnum]
 end
 
-function Fold.set_options()
-    vim.wo.foldenable = true
-    vim.wo.foldnestmax = 20
-    vim.wo.foldtext = "hnetxt_nvim#foldtext()"
-    vim.wo.fillchars = "fold: "
-    vim.wo.foldlevel = 2
-    vim.wo.foldmethod = 'expr'
-    vim.wo.foldexpr = 'hnetxt_nvim#foldexpr()'
-
+function Fold.add_syntax_highlights()
     Color.set_highlight({name = "Folded", val = {fg = 'magenta'}})
 end
 

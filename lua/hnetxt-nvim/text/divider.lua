@@ -25,7 +25,7 @@ function Divider:__tostring()
     return str .. string.rep(self.fill_char, self.width - (str:len()))
 end
 
-function Divider:set_highlight()
+function Divider:add_syntax_highlighting()
     cmd = self.highlight_cmd:gsub("KEY", self.highlight_key)
     cmd = cmd:gsub("DIVIDER", tostring(self))
     vim.cmd(cmd)
@@ -33,9 +33,9 @@ function Divider:set_highlight()
     Color.set_highlight({name = self.highlight_key, val = {fg = self.color}})
 end
 
-function Divider.set_highlights()
+function Divider.add_syntax_highlights()
     for size, _ in pairs(Divider.config.sizes) do
-        Divider(size):set_highlight()
+        Divider(size):add_syntax_highlighting()
     end
 end
 
