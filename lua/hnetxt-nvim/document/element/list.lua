@@ -103,6 +103,8 @@ function ListLine.get_sigil_class(sigil)
 end
 
 function ListLine:set_highlights()
+    if not self.highlight then return end
+
     -- sigils
     sigil_key = self.name .. "ListLineSigil"
     sigil_pattern = self.style.sigil.pattern:gsub("STR", self.sigil_regex or self.sigil)
