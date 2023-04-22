@@ -234,6 +234,24 @@ describe("get_line_levels", function()
         assert.are.same(expected, Fold():get_line_levels(lines))
     end)
 
+    it("end delimiter", function()
+        local lines = {"a >", "    c", "d"}
+        local expected = {0, 4, 0}
+        assert.are.same(expected, Fold():get_line_levels(lines))
+    end)
+
+    it("multiple", function()
+        local lines = table.list_extend(
+            tostring(Header({size = "large"})),
+            {
+                "- a >",
+                "    - b"
+            }
+        )
+        local expected = {0, 0, 0, 1, 1, 4}
+        assert.are.same(expected, Fold():get_line_levels(lines))
+    end)
+
     it("multiple indents", function()
         vim.b.list_types = {"question"}
 
