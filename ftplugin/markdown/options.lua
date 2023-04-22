@@ -1,5 +1,5 @@
 -- lists
-vim.b.list_types = {"question", "important", "maybe", "detail", "possibility"}
+vim.b.list_types = {"question", "important", "maybe", "detail", "possibility", "summary"}
 
 -- folds
 vim.wo.foldenable = true

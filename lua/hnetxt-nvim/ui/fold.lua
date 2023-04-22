@@ -230,9 +230,13 @@ function Fold.get_text(lnum)
     return whitespace .. "..."
 end
 
+function Fold.set_fold_levels()
+    vim.b.fold_levels = Fold():get_line_levels(BufferLines.get())
+end
+
 function Fold.get_indic(lnum)
     if not vim.b.fold_levels then
-        vim.b.fold_levels = Fold():get_line_levels(BufferLines.get())
+        Fold.set_fold_levels()
     end
 
     return vim.b.fold_levels[lnum]
