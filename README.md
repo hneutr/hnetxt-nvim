@@ -5,6 +5,7 @@
   - `list.lua`
   - `divider.lua`
   - `header.lua`
+  - `flag.lua`
 - `ui`:
   - `fold.lua`
 
