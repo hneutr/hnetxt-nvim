@@ -1,81 +1,67 @@
 local stub = require('luassert.stub')
 
-local Path = require("hneutil-nvim.path")
 local Location = require("hnetxt-nvim.text.location")
+local Mark = require("hnetxt-nvim.text.mark")
+
+local Path = require("hneutil-nvim.path")
 
 
-describe("new", function() 
-    local path_current_file
+describe("goto", function() 
+    local open_command = "edit"
+    local current_file
+    local open_path
+    local buf
 
     before_each(function()
-        path_current_file = stub(Path, "current_file")
+        vim.b.hnetxt_project_root = nil
+
+        current_file = Path.current_file
+        Path.current_file = function() return "file" end
+
+        stub(Path, "open")
+        stub(Mark, "goto")
     end)
 
     after_each(function()
-        path_current_file:revert()
+        vim.b.hnetxt_project_root = nil
+
+        Path.current_file = current_file
+
+        Path.open:revert()
+        Mark.goto:revert()
     end)
 
-    it("defaults the path", function()
-        local location = Location({label = "label"})
-        assert.stub(path_current_file).was_called()
+    it("str: -; Path.open: -; Mark.goto: +", function()
+        local lines = {
+            "a",
+            "b",
+            "[m1]()",
+            "[r1](file:m3)",
+            "",
+            "[m2]()",
+            "[r2](m2)",
+        }
+
+        local buf = vim.api.nvim_create_buf(false, true)
+        vim.api.nvim_command("buffer " .. buf)
+        vim.api.nvim_buf_set_lines(0, 0, -1, true, lines)
+
+        vim.api.nvim_win_set_cursor(0, {4, 0})
+
+        Location.goto(open_command)
+
+        assert.stub(Path.open).was_not_called()
+        assert.stub(Mark.goto).was_called_with("m3")
     end)
 
+    it("str: +; project_root: +; Path.open: +; Mark.goto: -", function()
+        vim.b.hnetxt_project_root = "dir"
+        Location.goto(open_command, "[a](f1)")
+
+        assert.stub(Path.open).was_called()
+        assert.stub(Mark.goto).was_not_called()
+    end)
 end)
 
-describe("__tostring", function() 
-    it("+", function()
-        local one = Location({path = 'a', label = 'b'})
-        local two = Location({path = 'c'})
-        assert.equals("a:b", tostring(one))
-        assert.equals("c", tostring(two))
-    end)
-end)
-
-describe("from_str", function() 
-    it("relativizes", function()
-    end)
-end)
-
-
--- describe("goto", function() 
---     local lines = {
---         "line 1",
---         "line 2",
---         "[marker 1]()",
---         "[reference 1](abc)",
---         "",
---         "[marker 2]()",
---         "[reference 2](marker 3)",
---     }
-
---     local mark_goto
-
---     before_each(function()
---         local buf = vim.api.nvim_create_buf(false, true)
---         vim.api.nvim_command("buffer " .. buf)
---         vim.api.nvim_buf_set_lines(0, 0, -1, true, lines)
-
---         vim.api.nvim_win_set_cursor(0, {4, 0})
-
---         nvim_win_set_cursor = stub(vim.api, "nvim_win_set_cursor")
---         mark_goto = stub(Mark, "goto")
---     end)
-
---     after_each(function()
---         mark_goto:revert()
---     end)
-
---     it("doesn't find the mark, doesn't move the cursor", function()
---         Mark.goto("marker 3")
---         assert.stub(mark_goto).was_not_called()
---     end)
-
---     it("finds the mark, moves the cursor", function()
---         Mark.goto("marker 1")
---         assert.stub(mark_goto).was_called_with()
---     end)
+-- describe("update", function() 
 -- end)
-
-
-describe("update", function() 
-end)

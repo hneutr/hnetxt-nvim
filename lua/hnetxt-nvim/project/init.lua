@@ -54,4 +54,6 @@ function M.push()
     vim.fn.system("git push")
 end
 
+
+
 return M

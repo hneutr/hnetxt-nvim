@@ -8,18 +8,22 @@
   - `list.lua`
   - `location.lua`
   - `mark.lua`
+- `project`:
+  - `init.lua`
+  - `mirror.lua`
+  - `scratch.lua`
 - `ui`:
   - `fold.lua`
+  - `fuzzy.lua`
+  - `opener.lua`
   - `statusline.lua`
 
 ----------------------------------------
 > [todo]()
 ----------------------------------------
 - `project`:
-  - `scratch`
   - `sync`
 - `ui`:
-  - `opener.lua`
   - `snippet`:
     - `divider.lua`
     - `header.lua`
@@ -29,8 +33,7 @@
 = [migrating nvim/lua/lex/config into hnetxt-lua]()
 =-----------------------------------------------------------
 - `Location`:
-  - overwrite `Location:__tostring` to: relativize `path`
-  - overwrite `Location:from_str` to: relativize `path`
-  - test `Location.goto`
   - implement `Location.update`
     - figure out what to do; should this only be done from within vim?
+  - figure out whether/where we should be using relative/absolute locations (in `lex.sync` and `lex.move`)
+- `Reference`: figure out whether/where we should be using relative/absolute references (in `lex.move` nd `lex.sync`)

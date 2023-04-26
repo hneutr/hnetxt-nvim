@@ -18,12 +18,7 @@ function M._do(fn)
         actions[key] = function(selected) fn(selected[1], action) end
     end
 
-    local locations = {}
-    for i, location in ipairs(Location.get_all_locations(vim.b.hnetxt_project_root), {actions = actions}) do
-        locations[i] = tostring(location)
-    end
-
-    require('fzf-lua').fzf_exec(locations, {actions = actions})
+    require('fzf-lua').fzf_exec(Location.get_all_locations(vim.b.hnetxt_project_root), {actions = actions})
 end
 
 function M.goto()
