@@ -26,7 +26,9 @@ function Line:write()
     BufferLines.set({start_line = self.line_number, replacement = {tostring(self)}})
 end
 
-function Line:__tostring() return self.indent .. self.text end
+function Line:__tostring()
+    return self.indent .. self.text
+end
 
 function Line:merge(other)
     self.text = _G.rstrip(self.text) .. " " .. _G.lstrip(other.text)
@@ -45,7 +47,6 @@ ListLine.defaults = {
     text = '',
     indent = '',
     line_number = 0,
-    -- name = 'bullet',
     sigil = '-',
     toggle_key = '',
     highlight = true,
