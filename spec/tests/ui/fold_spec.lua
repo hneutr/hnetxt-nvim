@@ -2,7 +2,7 @@ local Fold = require("hnetxt-nvim.ui.fold")
 
 local Divider = require("hnetxt-nvim.text.divider")
 local Header = require("hnetxt-nvim.text.header")
-local List = require("hnetxt-nvim.text.list")
+local List = require("hnetxt-lua.text.list")
 
 describe("barrier_starts_fold", function()
     it("-: start of header", function()

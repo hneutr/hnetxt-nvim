@@ -1,8 +1,8 @@
 local BufferLines = require("hneutil-nvim.buffer_lines")
 local Path = require("hneutil-nvim.path")
 
-local Location = require("hnetxt-lua.element.location"):extend()
-local Link = require("hnetxt-lua.element.link")
+local Location = require("hnetxt-lua.text.location"):extend()
+local Link = require("hnetxt-lua.text.link")
 local Mark = require("hnetxt-nvim.text.mark")
 
 
@@ -23,6 +23,7 @@ function Location.goto(open_command, str)
         Mark.goto(location.label)
     end
 end
+
 
 function Location.update(old_location, new_location)
     local old = old_location:gsub('/', '\\/')

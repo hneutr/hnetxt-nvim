@@ -1,11 +1,10 @@
 if vim.b.hnetxt_project_root then
-    local List = require("hnetxt-nvim.text.list")
     local Scratch = require("hnetxt-nvim.project.scratch")
     local Fuzzy = require("hnetxt-nvim.ui.fuzzy")
     local Opener = require("hnetxt-nvim.ui.opener")
 
     -- list
-    List.Parser():map_toggles(vim.g.mapleader .. "t")
+    require("hnetxt-nvim.text.list").map_toggles(vim.g.mapleader .. "t")
 
     local args = {silent = true, buffer = true}
 

@@ -7,15 +7,17 @@ local Color = require("hneutil-nvim.color")
 local Config = require("hnetxt-lua.config")
 local Header = require("hnetxt-nvim.text.header")
 local Divider = require("hnetxt-nvim.text.divider")
-local List = require("hnetxt-nvim.text.list")
+
+local List = require("hnetxt-lua.text.list")
 
 local Fold = Object:extend()
 Fold.config = Config.get("fold")
 Fold.line_suffix = Fold.config.line_suffix
 Fold.default_line_level = Fold.config.default_line_level
+Fold.list_types = table.keys(Config.get("list").types)
 
 function Fold:new(args)
-    self = table.default(self, args or {}, {list_parser = List.Parser()})
+    self = table.default(self, args or {}, {list_parser = List.Parser(self.list_types)})
     self.headers_by_size = Header.headers_by_size()
     self.dividers_by_size = Divider.dividers_by_size()
     self.level_stack = {0}

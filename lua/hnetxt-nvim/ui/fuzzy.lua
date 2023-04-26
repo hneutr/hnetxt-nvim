@@ -1,6 +1,6 @@
 local BufferLines = require("hneutil-nvim.buffer_lines")
 
-local Reference = require("hnetxt-lua.element.reference")
+local Reference = require("hnetxt-lua.text.reference")
 local Location = require("hnetxt-nvim.text.location")
 
 local fuzzy_actions = {

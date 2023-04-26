@@ -1,5 +1,6 @@
-local Mark = require("hnetxt-lua.element.mark"):extend()
 local BufferLines = require("hneutil-nvim.buffer_lines")
+
+local Mark = require("hnetxt-lua.text.mark"):extend()
 
 function Mark.goto(label)
     for i, line in ipairs(BufferLines.get()) do
