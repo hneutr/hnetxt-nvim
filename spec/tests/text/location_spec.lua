@@ -62,6 +62,3 @@ describe("goto", function()
         assert.stub(Mark.goto).was_not_called()
     end)
 end)
-
--- describe("update", function() 
--- end)
