@@ -23,6 +23,7 @@ function Path.open(path, open_command)
         vim.cmd("silent call chansend(" .. term_id .. ", 'cd " .. tostring(path) .. "\r')")
         vim.cmd("silent call chansend(" .. term_id .. ", 'clear\r')")
     else
+        Path.touch(path)
         vim.cmd("silent " .. open_command .. " " .. tostring(path))
     end
 end
