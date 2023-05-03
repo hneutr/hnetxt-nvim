@@ -12,6 +12,7 @@
   - `init.lua`
   - `mirror.lua`
   - `scratch.lua`
+  - `sync.lua`
 - `ui`:
   - `fold.lua`
   - `fuzzy.lua`
