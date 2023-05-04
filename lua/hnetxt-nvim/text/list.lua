@@ -75,6 +75,43 @@ function LineToggle:map_toggle(lhs_prefix)
     end
 end
 
+function LineToggle.set_selected_lines(args)
+    args = table.default(args, {mode = 'n', lines = {}, new_line_class = nil})
+
+    local new_lines = {}
+    for i, line in ipairs(args.lines) do
+        line = args.new_line_class({text = line.text, indent = line.indent, line_number = line.line_number})
+        table.insert(new_lines, tostring(line))
+    end
+
+    return BufferLines.selection.set({mode = args.mode, replacement = new_lines})
+end
+
+function LineToggle.get_new_line_class(lines, toggle_line_type_name)
+    local min_indent_line = LineToggle.get_min_indent_line(lines)
+
+    if min_indent_line then
+        if min_indent_line.name == toggle_line_type_name then
+            return ListLine.get_class(min_indent_line.toggle.to)
+        else
+            return ListLine.get_class(toggle_line_type_name)
+        end
+    end
+end
+
+function LineToggle.get_min_indent_line(lines)
+    local min_indent, min_indent_line = 1000, nil
+    for _, line in ipairs(lines) do
+        if line.indent:len() < min_indent then
+            min_indent = line.indent:len()
+            min_indent_line = line
+        end
+    end
+
+    return min_indent_line
+end
+
+
 --------------------------------------------------------------------------------
 --                                    etc                                     --
 --------------------------------------------------------------------------------
@@ -92,49 +129,12 @@ local function toggle(mode, toggle_line_class_name)
     local parser = get_parser()
     lines = parser:parse(BufferLines.selection.get({mode = mode}))
 
-    local new_line_class = get_new_line_class(lines, toggle_line_class_name)
+    local new_line_class = LineToggle.get_new_line_class(lines, toggle_line_class_name)
 
     if new_line_class then
-        set_selected_lines({mode = mode, lines = lines, new_line_class = new_line_class})
+        LineToggle.set_selected_lines({mode = mode, lines = lines, new_line_class = new_line_class})
     end
 end
-
-local function set_selected_lines(args)
-    args = table.default(args, {mode = 'n', lines = {}, new_line_class = nil})
-
-    local new_lines = {}
-    for i, line in ipairs(args.lines) do
-        line = args.new_line_class({text = line.text, indent = line.indent, line_number = line.line_number})
-        table.insert(new_lines, tostring(line))
-    end
-
-    return BufferLines.selection.set({mode = args.mode, replacement = new_lines})
-end
-
-local function get_new_line_class(lines, toggle_line_type_name)
-    local min_indent_line = get_min_indent_line(lines)
-
-    if min_indent_line then
-        if min_indent_line.name == toggle_line_type_name then
-            return ListLine.get_class(min_indent_line.toggle.to)
-        else
-            return ListLine.get_class(toggle_line_type_name)
-        end
-    end
-end
-
-local function get_min_indent_line(lines)
-    local min_indent, min_indent_line = 1000, nil
-    for _, line in ipairs(lines) do
-        if line.indent:len() < min_indent then
-            min_indent = line.indent:len()
-            min_indent_line = line
-        end
-    end
-
-    return min_indent_line
-end
-
 
 local function join(buffer_id)
     buffer_id = buffer_id or 0
