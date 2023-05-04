@@ -15,7 +15,7 @@ end
 
 function M.set()
     local mappings = {
-        { prefix = 'n', fn = function(open_cmd) Location.goto(open_cmd) end },
+        {prefix = 'n', fn = function(open_cmd) Location.goto(open_cmd) end},
     }
 
     for mirror_type, type_config in pairs(Mirror.type_configs) do
@@ -29,7 +29,7 @@ function M.set()
     end
 
     for i, mapping in ipairs(mappings) do
-        mapping.lhs_prefix = table.removekey(mapping, 'prefix')
+        mapping.lhs_prefix = vim.b.hnetxt_opener_prefix .. table.removekey(mapping, 'prefix')
     end
 
     table.insert(mappings, {
@@ -76,9 +76,9 @@ function M.format(args)
     return mappings
 end
 
-function M.map(lhs_prefix)
-    for i, mapping in ipairs(M.get()) do
-        vim.keymap.set('n', lhs_prefix .. mapping.lhs, mapping.rhs, mapping.args)
+function M.map()
+    for _, mapping in ipairs(M.get()) do
+        vim.keymap.set('n', mapping.lhs, mapping.rhs, mapping.args)
     end
 end
 

@@ -18,5 +18,5 @@ if vim.b.hnetxt_project_root then
     vim.keymap.set("v", " s", [[:'<,'>lua require('hnetxt-nvim.project.scratch')('v')<cr>]], args)
 
     -- opener
-    Opener.map("<leader>o")
+    Opener.map()
 end
