@@ -1,9 +1,9 @@
-local BufferLines = require("hneutil-nvim.buffer_lines")
-local Path = require("hneutil-nvim.path")
+local BufferLines = require("hn.buffer_lines")
+local Path = require("hn.path")
 
-local Location = require("hnetxt-lua.text.location"):extend()
-local Link = require("hnetxt-lua.text.link")
-local Mark = require("hnetxt-nvim.text.mark")
+local Location = require("htl.text.location"):extend()
+local Link = require("htl.text.link")
+local Mark = require("htn.text.mark")
 
 
 function Location.goto(open_command, str)

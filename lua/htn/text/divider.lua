@@ -1,6 +1,6 @@
-local Color = require("hneutil-nvim.color")
+local Color = require("hn.color")
 
-local Divider = require("hnetxt-lua.text.divider"):extend()
+local Divider = require("htl.text.divider"):extend()
 Divider.highlight_cmd = [[syn region KEY start="^\s*DIVIDER$" end="$" containedin=ALL]]
 
 function Divider:add_syntax_highlighting()

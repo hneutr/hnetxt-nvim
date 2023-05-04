@@ -1,9 +1,9 @@
 local stub = require('luassert.stub')
 
-local Location = require("hnetxt-nvim.text.location")
-local Mark = require("hnetxt-nvim.text.mark")
+local Location = require("htn.text.location")
+local Mark = require("htn.text.mark")
 
-local Path = require("hneutil-nvim.path")
+local Path = require("hn.path")
 
 
 describe("goto", function() 

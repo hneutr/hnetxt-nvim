@@ -19,13 +19,12 @@
 --   - remove it from the "delete move" list
 --   - add it back onto the "deleted" list
 --------------------------------------------------------------------------------
-local BufferLines = require("hneutil-nvim.buffer_lines")
+local BufferLines = require("hn.buffer_lines")
+local Path = require("hn.path")
 
-local Path = require("hneutil-nvim.path")
-
-local Location = require("hnetxt-nvim.text.location")
-local Reference = require("hnetxt-lua.text.reference")
-local Mark = require("hnetxt-lua.text.mark")
+local Location = require("htn.text.location")
+local Reference = require("htl.text.reference")
+local Mark = require("htl.text.mark")
 
 local M = {}
 

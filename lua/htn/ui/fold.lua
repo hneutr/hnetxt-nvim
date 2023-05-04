@@ -1,7 +1,7 @@
-local BufferLines = require("hneutil-nvim.buffer_lines")
-local Color = require("hneutil-nvim.color")
+local BufferLines = require("hn.buffer_lines")
+local Color = require("hn.color")
 
-local Fold = require("hnetxt-lua.parse.fold"):extend()
+local Fold = require("htl.parse.fold"):extend()
 
 function Fold.get_text(lnum)
     local text = BufferLines.line.get({start_line = lnum})

@@ -1,4 +1,4 @@
-local List = require("hnetxt-nvim.text.list")
+local List = require("htn.text.list")
 
 local args = {silent = true}
 

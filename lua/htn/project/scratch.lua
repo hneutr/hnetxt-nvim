@@ -1,6 +1,6 @@
-local BufferLines = require("hneutil-nvim.buffer_lines")
-local Mirror = require('hnetxt-nvim.project.mirror')
-local Path = require('hneutil-nvim.path')
+local BufferLines = require("hn.buffer_lines")
+local Path = require('hn.path')
+local Mirror = require('htn.project.mirror')
 
 return function(mode)
     local lines = BufferLines.selection.get({mode = mode})

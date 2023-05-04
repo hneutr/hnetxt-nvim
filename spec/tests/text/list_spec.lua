@@ -12,7 +12,7 @@ TODO test:
     - get_min_indent_line
     - get_new_line_class
 --]]
-local List = require("hnetxt-nvim.text.list")
+local List = require("htn.text.list")
 
 describe("join", function()
     local cursor_start_pos

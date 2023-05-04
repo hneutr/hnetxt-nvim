@@ -1,13 +1,13 @@
 local stub = require('luassert.stub')
-local Path = require("hneutil-nvim.path")
+local Path = require("hn.path")
 
-local Reference = require("hnetxt-lua.text.reference")
-local Project = require("hnetxt-lua.project")
+local Reference = require("htl.text.reference")
+local Project = require("htl.project")
 
 local test_dir = Path.joinpath(Path.tempdir(), "test-dir")
 local test_file = Path.joinpath(test_dir, "test-file.md")
 
-local Sync = require("hnetxt-nvim.project.sync")
+local Sync = require("htn.project.sync")
 
 describe("sync", function()
     before_each(function()
@@ -69,7 +69,7 @@ describe("sync", function()
     end)
 
     describe("on change", function()
-        local Location = require("hnetxt-nvim.text.location")
+        local Location = require("htn.text.location")
 
         before_each(function()
             local buf = vim.api.nvim_create_buf(false, true)

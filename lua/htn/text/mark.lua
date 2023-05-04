@@ -1,6 +1,6 @@
-local BufferLines = require("hneutil-nvim.buffer_lines")
+local BufferLines = require("hn.buffer_lines")
 
-local Mark = require("hnetxt-lua.text.mark"):extend()
+local Mark = require("htl.text.mark"):extend()
 
 function Mark.goto(label)
     local line = Mark.find(label, BufferLines.get())

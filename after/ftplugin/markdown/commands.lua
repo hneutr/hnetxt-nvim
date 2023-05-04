@@ -1,10 +1,10 @@
 if vim.b.hnetxt_project_root then
     local cmd = vim.api.nvim_buf_create_user_command
 
-    local Path = require("hneutil-nvim.path")
-    local Journal = require("hnetxt-lua.journal")
-    local Registry = require("hnetxt-lua.project.registry")
-    local Goals = require("hnetxt-lua.goals")
+    local Path = require("hn.path")
+    local Journal = require("htl.journal")
+    local Registry = require("htl.project.registry")
+    local Goals = require("htl.goals")
 
     local project = Registry():get_entry_name(vim.b.hnetxt_project_root)
 

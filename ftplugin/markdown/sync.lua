@@ -1,4 +1,4 @@
-local Sync = require('hnetxt-nvim.project.sync')
+local Sync = require('htn.project.sync')
 vim.b.hnetxt_sync = true
 
 local pattern = "*.md"

@@ -1,4 +1,4 @@
-local Path = require('hneutil-nvim.path')
+local Path = require('hn.path')
 
 function get_path()
     local path = Path.current_file()

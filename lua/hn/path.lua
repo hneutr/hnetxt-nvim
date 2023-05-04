@@ -1,4 +1,4 @@
-local Path = require("hneutil.path")
+local Path = require("hl.path")
 
 function Path.current_file()
     return vim.fn.expand('%:p')

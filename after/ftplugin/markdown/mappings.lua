@@ -1,9 +1,9 @@
-require("hnetxt-nvim.text.list").map_toggles(vim.g.mapleader .. "t")
+require("htn.text.list").map_toggles(vim.g.mapleader .. "t")
 
 if vim.b.hnetxt_project_root then
-    local Scratch = require("hnetxt-nvim.project.scratch")
-    local Fuzzy = require("hnetxt-nvim.ui.fuzzy")
-    local Opener = require("hnetxt-nvim.ui.opener")
+    local Scratch = require("htn.project.scratch")
+    local Fuzzy = require("htn.ui.fuzzy")
+    local Opener = require("htn.ui.opener")
 
     local args = {silent = true, buffer = true}
 
@@ -15,7 +15,7 @@ if vim.b.hnetxt_project_root then
 
     -- scratch
     vim.keymap.set("n", " s", function() Scratch('n') end, args)
-    vim.keymap.set("v", " s", [[:'<,'>lua require('hnetxt-nvim.project.scratch')('v')<cr>]], args)
+    vim.keymap.set("v", " s", [[:'<,'>lua require('htn.project.scratch')('v')<cr>]], args)
 
     -- opener
     Opener.map()

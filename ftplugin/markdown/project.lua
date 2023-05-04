@@ -1,4 +1,4 @@
-local Project = require("hnetxt-nvim.project")
+local Project = require("htn.project")
 
 Project.set()
 

@@ -1,5 +1,5 @@
 local stub = require('luassert.stub')
-local Mark = require("hnetxt-nvim.text.mark")
+local Mark = require("htn.text.mark")
 
 
 describe("goto", function() 

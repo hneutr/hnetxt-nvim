@@ -30,9 +30,6 @@
     - `header.lua`
     - `link_header.lua`
 
-=-----------------------------------------------------------
-= [migrating nvim/lua/lex/config into hnetxt-lua]()
-=-----------------------------------------------------------
 - `Location`: 
   - `update`: test
   - figure out whether/where to use relative/absolute locations (in `lex.sync` and `lex.move`)

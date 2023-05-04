@@ -1,5 +1,5 @@
-local Mirror = require('hnetxt-nvim.project.mirror')
-local Location = require("hnetxt-nvim.text.location")
+local Mirror = require('htn.project.mirror')
+local Location = require("htn.text.location")
 
 local M = {}
 

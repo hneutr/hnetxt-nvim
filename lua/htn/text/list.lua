@@ -1,11 +1,11 @@
-table = require("hneutil.table")
-string = require("hneutil.string")
+table = require("hl.table")
+string = require("hl.string")
 
-local Object = require("hneutil.object")
-local Color = require("hneutil-nvim.color")
-local BufferLines = require("hneutil-nvim.buffer_lines")
+local Object = require("hl.object")
+local Color = require("hn.color")
+local BufferLines = require("hn.buffer_lines")
 
-local List = require("hnetxt-lua.text.list")
+local List = require("htl.text.list")
 
 --------------------------------------------------------------------------------
 --                                 LineSyntax                                 --
@@ -55,7 +55,7 @@ end
 --                                 LineToggle                                 --
 --------------------------------------------------------------------------------
 local LineToggle = Object:extend()
-LineToggle.mapping_rhs = [[:lua require('hnetxt-nvim.text.list').toggle('MODE', 'NAME')<cr>]]
+LineToggle.mapping_rhs = [[:lua require('htn.text.list').toggle('MODE', 'NAME')<cr>]]
 LineToggle.defaults = {
     toggle_key = '',
     toggle = {to = 'bullet'},
@@ -211,7 +211,7 @@ end
 return {
     join = join,
     continue = continue,
-    continue_cmd = [[<cmd>lua require('hnetxt-nvim.text.list').continue()<cr>]],
+    continue_cmd = [[<cmd>lua require('htn.text.list').continue()<cr>]],
     toggle = toggle,
     map_toggles = map_toggles,
     add_syntax_highlights = add_syntax_highlights,

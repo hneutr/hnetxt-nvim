@@ -1,5 +1,5 @@
-local Project = require("hnetxt-lua.project")
-local Path = require("hneutil-nvim.path")
+local Project = require("htl.project")
+local Path = require("hn.path")
 
 local M = {}
 

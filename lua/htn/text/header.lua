@@ -1,6 +1,6 @@
-local Color = require("hneutil-nvim.color")
+local Color = require("hn.color")
 
-local Header = require("hnetxt-lua.text.header"):extend()
+local Header = require("htl.text.header"):extend()
 Header.highlight_cmd = [[syn match KEY /^CONTENT_START\s/ contained]]
 
 function Header:add_syntax_highlighting()

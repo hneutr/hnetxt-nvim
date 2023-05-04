@@ -9,7 +9,7 @@ vim.wo.foldtext = "hnetxt_nvim#foldtext()"
 
 local pattern = "*.md"
 local group = vim.api.nvim_create_augroup('hnetxt_fold_cmds', {clear = true})
-local Fold = require('hnetxt-nvim.ui.fold')
+local Fold = require('htn.ui.fold')
 
 vim.api.nvim_create_autocmd({'TextChanged', 'InsertLeave'}, {
     pattern=pattern,
