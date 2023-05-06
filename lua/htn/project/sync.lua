@@ -126,7 +126,7 @@ function M.check_rename(old_markers, new_markers, creations, deletions)
 end
 
 function M.update_renames(old_marker, new_marker, renames)
-    if old_marker:len() > 0 and new_marker:len() > 0 then
+    if #old_marker > 0 and #new_marker > 0 then
         Location.update(
             tostring(Location({path = Path.current_file(), label = old_marker})),
             tostring(Location({path = Path.current_file(), label = new_marker}))

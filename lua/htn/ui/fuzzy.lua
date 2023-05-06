@@ -41,7 +41,7 @@ function M.insert_selection(location)
 
     local insert_command = 'i'
 
-    if column == line:len() - 1 then
+    if column == #line - 1 then
         column = column + 1
         insert_command = 'a'
     elseif column == 0 then
@@ -51,7 +51,7 @@ function M.insert_selection(location)
     local content = tostring(Reference({location = Location.from_str(location)}))
 
     local new_line = line:sub(1, column) .. content .. line:sub(column + 1)
-    local new_column = column + content:len()
+    local new_column = column + #content
 
     BufferLines.cursor.set({replacement = {new_line}})
 

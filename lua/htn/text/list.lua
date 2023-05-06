@@ -102,8 +102,8 @@ end
 function LineToggle.get_min_indent_line(lines)
     local min_indent, min_indent_line = 1000, nil
     for _, line in ipairs(lines) do
-        if line.indent:len() < min_indent then
-            min_indent = line.indent:len()
+        if #line.indent < min_indent then
+            min_indent = #line.indent
             min_indent_line = line
         end
     end

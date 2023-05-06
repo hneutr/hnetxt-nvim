@@ -7,7 +7,7 @@ end
 function Path.open(path, open_command)
     open_command = open_command or "edit"
 
-    if Path.suffix(path):len() > 0 then
+    if #Path.suffix(path) > 0 then
         Path.mkdir(Path.parent(path))
     else
         Path.mkdir(path)

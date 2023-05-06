@@ -19,7 +19,7 @@ function Location.goto(open_command, str)
         Path.open(location.path, open_command)
     end
 
-    if location.label:len() > 0 then
+    if #location.label > 0 then
         Mark.goto(location.label)
     end
 end

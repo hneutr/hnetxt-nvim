@@ -20,7 +20,7 @@ function M.set()
 
     for mirror_type, type_config in pairs(Mirror.type_configs) do
         local mirror_keymap_prefix = type_config.keymap_prefix
-        if type(mirror_keymap_prefix) == 'string' and mirror_keymap_prefix:len() > 0 then
+        if type(mirror_keymap_prefix) == 'string' and #mirror_keymap_prefix > 0 then
             table.insert(mappings, {
                 prefix = mirror_keymap_prefix,
                 fn = function(open_cmd) Mirror.open(mirror_type, open_cmd) end,
