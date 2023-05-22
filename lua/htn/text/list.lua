@@ -1,5 +1,6 @@
-table = require("hl.table")
 string = require("hl.string")
+
+local Dict = require("hl.Dict")
 
 local Object = require("hl.object")
 local Color = require("hn.color")
@@ -76,7 +77,7 @@ function LineToggle:map_toggle(lhs_prefix)
 end
 
 function LineToggle.set_selected_lines(args)
-    args = table.default(args, {mode = 'n', lines = {}, new_line_class = nil})
+    args = Dict.from(args, {mode = 'n', lines = {}, new_line_class = nil})
 
     local new_lines = {}
     for i, line in ipairs(args.lines) do
@@ -120,7 +121,7 @@ local function get_parser()
     for name, Class in pairs(parser.classes) do
         Class:implement(LineSyntax)
         Class:implement(LineToggle)
-        Class.defaults = table.default(Class.defaults, LineSyntax.defaults, LineToggle.defaults)
+        Class.defaults = Dict.from(Class.defaults, LineSyntax.defaults, LineToggle.defaults)
     end
     return parser
 end

@@ -9,9 +9,8 @@ if vim.b.hnetxt_project_root then
 
     -- fuzzy
     vim.keymap.set("n", " df", Fuzzy.goto, args)
-    -- "  is <c-/> (the mapping only works if it's the literal character)
-    vim.keymap.set("n", "", Fuzzy.put, args)
-    vim.keymap.set("i", "", Fuzzy.insert, args)
+    vim.keymap.set("n", "<c-/>", Fuzzy.put, args)
+    vim.keymap.set("i", "<c-/>", Fuzzy.insert, args)
 
     -- scratch
     vim.keymap.set("n", " s", function() Scratch('n') end, args)
