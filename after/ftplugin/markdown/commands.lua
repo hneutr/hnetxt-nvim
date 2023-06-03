@@ -3,11 +3,8 @@ if vim.b.hnetxt_project_root then
 
     local Path = require("hn.path")
     local Journal = require("htl.journal")
-    local Registry = require("htl.project.registry")
     local Goals = require("htl.goals")
 
-    local project = Registry():get_entry_name(vim.b.hnetxt_project_root)
-
-    cmd(0, "Journal", function() Path.open(Journal({project = project})) end, {})
+    cmd(0, "Journal", function() Path.open(Journal(vim.b.hnetxt_project_root)) end, {})
     cmd(0, "Goals", function() Path.open(Goals()) end, {})
 end
