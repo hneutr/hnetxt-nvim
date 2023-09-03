@@ -1,39 +1,15 @@
+local List = require("hl.list")
 local Mirror = require('htn.project.mirror')
 local Location = require("htn.text.location")
+local Entry = require("htn.text.metadata")
 
 local M = {}
 
 local default_lhs_to_cmd = {e = 'e', o = 'e', l = 'vs', v = 'vs', j = 'sp', s = 'sp'}
 
-function M.get()
-    if not vim.g.lex_opener_mappings then
-        M.set()
-    end
-
-    return vim.g.lex_opener_mappings
-end
-
-function M.set()
-    local mappings = {
-        {prefix = 'n', fn = function(open_cmd) Location.goto(open_cmd) end},
-    }
-
-    for mirror_type, type_config in pairs(Mirror.type_configs) do
-        local mirror_keymap_prefix = type_config.keymap_prefix
-        if type(mirror_keymap_prefix) == 'string' and #mirror_keymap_prefix > 0 then
-            table.insert(mappings, {
-                prefix = mirror_keymap_prefix,
-                fn = function(open_cmd) Mirror.open(mirror_type, open_cmd) end,
-            })
-        end
-    end
-
-    for i, mapping in ipairs(mappings) do
-        mapping.lhs_prefix = vim.b.hnetxt_opener_prefix .. table.removekey(mapping, 'prefix')
-    end
-
-    table.insert(mappings, {
-        fn = function(open_cmd) Location.goto(open_cmd) end,
+local all_mappings = {
+    nearest_location = {
+        fn = Location.goto,
         lhs_to_cmd = {
             ["<M-l>"] = "vsplit",
             ["<M-j>"] = "split",
@@ -41,9 +17,30 @@ function M.set()
             ["<M-t>"] = "tabedit",
         },
         map_args = {},
-    })
+    },
+    new_entry = {
+        lhs_prefix = "<leader>n",
+        fn = Entry.open_new,
+    },
+}
 
-    vim.g.lex_opener_mappings = M.format_all(mappings)
+function M.get()
+    if not vim.g.ht_opener_mappings then
+        M.set()
+    end
+
+    return vim.g.ht_opener_mappings
+end
+
+function M.set()
+    local mappings = List({all_mappings.new_entry})
+
+    if vim.b.hnetxt_project_root then
+        mappings:append(all_mappings.nearest_location)
+        mappings:extend(Mirror.get_mappings())
+    end
+
+    vim.g.ht_opener_mappings = M.format_all(mappings)
 end
 
 function M.format_all(raw_mappings)
@@ -62,7 +59,7 @@ function M.format(args)
         fn = nil,
         lhs_to_cmd = default_lhs_to_cmd,
         lhs_prefix = '',
-        map_args = { silent = true, buffer = 0 },
+        map_args = {silent = true, buffer = 0},
     })
 
     local mappings = {}
@@ -70,7 +67,7 @@ function M.format(args)
         lhs = args.lhs_prefix .. lhs
 
         local rhs = function() args.fn(cmd) end
-        table.insert(mappings, { lhs = lhs, rhs = rhs, args = args.map_args })
+        table.insert(mappings, {lhs = lhs, rhs = rhs, args = args.map_args})
     end
 
     return mappings

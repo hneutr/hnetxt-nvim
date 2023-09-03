@@ -167,33 +167,37 @@ local function join(buffer_id)
     })
 end
 
-local function continue()
-    local parser = get_parser()
-    local chars = {}
-    for name, Class in pairs(parser.classes) do
-        table.insert(chars, Class.defaults.sigil)
+local function get_parser_lazy()
+    if not vim.b.list_parser then
+        vim.b.list_parser = get_parser()
     end
 
-	local current_line = vim.fn.getline(vim.fn.line("."))
-    current_line = current_line:match("%s*(.*)")
+    return vim.b.list_parser
+end
 
-	local preceding_line = vim.fn.getline(vim.fn.line(".") - 1)
+local function continue()
+    local current_line_number = vim.api.nvim_win_get_cursor(0)[1] - 1
+    local previous_line_number = current_line_number - 1
 
-    if preceding_line:match("^%s*%d+%.%s") then
-		local next_list_index = preceding_line:match("%d+") + 1
-		vim.fn.setline(".", preceding_line:match("^%s*") .. next_list_index .. ". ")
-        vim.api.nvim_input("<esc>A")
-    elseif vim.tbl_count(chars) > 0 then
-        for _, char in ipairs(chars) do
-            local pattern = "^%s*" .. char:escape() .. "%s"
-            local matched_content = preceding_line:match(pattern)
-            if matched_content then
-                vim.fn.setline(".", matched_content .. current_line)
-                vim.api.nvim_input("<esc>A")
-                return
+    local lines = BufferLines.get({
+        start_line = previous_line_number,
+        end_line = current_line_number + 1,
+    })
+
+    for class_name, Class in pairs(get_parser_lazy().classes) do
+        local list_line = Class.get_if_str_is_a(lines[1], previous_line_number)
+
+        if list_line then
+            list_line.text = lines[2]:strip()
+
+            if class_name == 'number' then
+                list_line.number = list_line.number + 1
             end
+
+            BufferLines.cursor.set({start_line = current_line_number, replacement = {tostring(list_line)}})
+            vim.api.nvim_input("<esc>A")
         end
-	end
+    end
 end
 
 local function map_toggles(lhs_prefix)
