@@ -1,7 +1,7 @@
 local Color = require("hn.color")
 
 local Header = require("htl.text.header"):extend()
-Header.highlight_cmd = [[syn match KEY /^CONTENT_START\s/ contained]]
+Header.highlight_cmd = [[syn match KEY /^CONTENT_START\s/ containedin=ALL]]
 
 function Header:add_syntax_highlighting()
     local highlight_key = self.size .. "HeaderStart" 
