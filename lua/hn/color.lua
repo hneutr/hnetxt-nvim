@@ -1,5 +1,9 @@
+local List = require("hl.list")
+
+local M = {}
+
 -- https://github.com/altercation/vim-colors-solarized
-local C = {
+M.C = {
     cterm = {
         black    = 0,
         white    = 7,
@@ -23,7 +27,19 @@ local C = {
     },
 }
 
-local function set_highlight(args)
+function M.add_to_syntax(key, args)
+    local cmd = List({
+        "syn match",
+        key,
+        "/" .. args.string .. "/",
+        "containedin=ALL"
+    }):join(" ")
+
+    vim.cmd(cmd)
+    M.set_highlight({name = key, val = {fg = args.color}})
+end
+
+function M.set_highlight(args)
     args = _G.default_args(args, {namespace = 0, name = '', val = {}})
 
     local allowed_keys = {
@@ -50,7 +66,7 @@ local function set_highlight(args)
 
     for _, key in ipairs({'fg', 'bg'}) do
         if val[key] ~= nil then
-            val["cterm" .. key] = C.cterm[table.removekey(val, key)]
+            val["cterm" .. key] = M.C.cterm[table.removekey(val, key)]
         end
     end
 
@@ -59,7 +75,9 @@ local function set_highlight(args)
     end
 end
 
-return {
-    C = C,
-    set_highlight = set_highlight,
-}
+return M
+-- return {
+--     C = C,
+--     set_highlight = set_highlight,
+--     set_string_syntax = set_string_syntax,
+-- }
