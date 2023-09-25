@@ -4,8 +4,8 @@ local Path = require("hn.path")
 local Reference = require("htl.text.reference")
 local Project = require("htl.project")
 
-local test_dir = Path.joinpath(Path.tempdir(), "test-dir")
-local test_file = Path.joinpath(test_dir, "test-file.md")
+local test_dir = Path.join(tostring(Path.tempdir), "test-dir")
+local test_file = Path.join(test_dir, "test-file.md")
 
 local Sync = require("htn.project.sync")
 

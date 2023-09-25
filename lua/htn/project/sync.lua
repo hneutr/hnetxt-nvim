@@ -46,7 +46,7 @@ function M.buf_enter()
         for i, location in ipairs(Reference.get_referenced_mark_locations(vim.b.hnetxt_project_root)) do
             location = tostring(location)
             if not Path.is_relative_to(location, vim.b.hnetxt_project_root) then
-                location = Path.joinpath(vim.b.hnetxt_project_root, location)
+                location = Path.join(vim.b.hnetxt_project_root, location)
             end
             referenced_markers[location] = true
         end
