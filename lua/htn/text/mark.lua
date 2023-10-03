@@ -1,6 +1,6 @@
 local BufferLines = require("hn.buffer_lines")
 
-local Mark = require("htl.text.mark"):extend()
+local Mark = require("htl.text.mark")
 
 function Mark.goto(label)
     local line = Mark.find(label, BufferLines.get())

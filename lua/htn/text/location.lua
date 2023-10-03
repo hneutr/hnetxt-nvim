@@ -1,7 +1,7 @@
 local BufferLines = require("hn.buffer_lines")
 local Path = require("hn.path")
 
-local Location = require("htl.text.location"):extend()
+local Location = require("htl.text.location")
 local Link = require("htl.text.link")
 local Mark = require("htn.text.mark")
 
